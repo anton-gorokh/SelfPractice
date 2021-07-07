@@ -1,6 +1,10 @@
+package lesson0.countwords;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
+
+// Подсчитать количество слов в предложении с учетом повторений.
 
 public class CountWords {
     public static String text = "Мама моет раму, раму мыла мама.";

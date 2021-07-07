@@ -23,7 +23,8 @@ public class Main {
     }
 
     public static HashSet<Student> commonStudents(List<Student> students, List<Student> students1) {
-        students.retainAll(students1);
-        return new HashSet<Student>(students);
+        List<Student> common = new ArrayList<>(students);
+        common.retainAll(students1);
+        return new HashSet<>(common);
     }
 }

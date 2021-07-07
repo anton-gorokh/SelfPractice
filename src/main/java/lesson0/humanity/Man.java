@@ -1,4 +1,4 @@
-package lesson0.maptask;
+package lesson0.humanity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

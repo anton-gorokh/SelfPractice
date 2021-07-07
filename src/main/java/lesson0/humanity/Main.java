@@ -1,4 +1,4 @@
-package lesson0.maptask;
+package lesson0.humanity;
 
 import java.util.*;
 import java.util.stream.Collectors;

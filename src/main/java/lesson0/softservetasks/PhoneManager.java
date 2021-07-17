@@ -28,13 +28,21 @@ public class PhoneManager {
     }
 
     public Map<String, Stream<String>> phoneNumbers(List<Stream<String>> list) {
-        if (list.stream().flatMap(Function.identity()).count() == 0) throw new NullPointerException();
+        if (list.stream().flatMap(Function.identity()).count() == 0) {
+            throw new NullPointerException();
+        }
 
-        Map<String, List<String>> tmp = list.stream().flatMap(Function.identity()).map(x -> x.replaceAll("[^0-9]", ""))
+        Map<String, List<String>> tmp = list.stream()
+                .flatMap(Function.identity())
+                .peek(x -> x.replaceAll("[^0-9]", ""))
                 .collect(Collectors.groupingBy(x -> {
-                    if (x.length() == 10) return x.substring(0, 2);
-                    else if (x.length() == 7) return "loc";
-                    else return "err";
+                    if (x.length() == 10) {
+                        return x.substring(0, 2);
+                    } else if (x.length() == 7) {
+                        return "loc";
+                    } else {
+                        return "err";
+                    }
                 }, Collectors.toList()));
 
         Map<String, Stream<String>> phoneNumbers = new HashMap<>();

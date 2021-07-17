@@ -42,15 +42,12 @@ public class Main {
         humanity.add(new Man("Noname", "Nonamovi4", 0, 37, new Address("USSR", "NoWeatherCity", "GoodStreet", 19)));
         humanity.add(new Man("Noname", "Nonamovi4", 0, 37, new Address("USSR", "NoWeatherCity", "GoodStreet", 19)));
 
-        humanity.stream().filter(x -> {
-            System.out.println(x);
-            return x.getAge() >= 20;
-        }).sorted(new Comparator<Man>() {
-            @Override
-            public int compare(Man o1, Man o2) {
-                return o1.getSurname().compareTo(o2.getSurname());
-            }
-        }).forEach(x -> System.out.printf("%s %s %d \n", x.getSurname(), x.getName(), x.getChildren()));
+        humanity.stream().forEach(System.out::println);
+
+        humanity.stream().filter(x -> x.getAge() >= 20)
+                .sorted(Comparator.comparing(Man::getSurname))
+                .forEach(x -> System.out.printf("%s %s %d \n", x.getSurname(), x.getName(), x.getChildren()));
+
         humanity.stream().filter(x -> x.getAddress().getCountry().equals("US")).forEach(x -> {
             x.setName("John");
             x.setSurname("Kennedi");
@@ -58,7 +55,8 @@ public class Main {
         });
 
         System.out.println();
-        humanity.stream().filter(x -> x.getAddress().getCountry().equals("Canada") && (x.getAge() > 25 || x.getAddress().getNumberOfHome() == 3))
+        humanity.stream()
+                .filter(x -> x.getAddress().getCountry().equals("Canada") && (x.getAge() > 25 || x.getAddress().getNumberOfHome() == 3))
                 .forEach(x -> System.out.printf("%s %s %s \n", x.getName(), x.getSurname(), x.getAddress().getStreet()));
         System.out.println();
 
@@ -67,7 +65,22 @@ public class Main {
         Map<Integer, Map<Integer, List<Man>>> groupByKidsAndAge = humanity.stream()
                 .collect(Collectors.groupingBy(Man::getChildren, Collectors.groupingBy(Man::getAge)));
 
-        Map<String, Map<String, List<Man>>> groupByCityAndStreet = humanity.stream()
+        class ForMan {
+            private int children;
+            private int age;
+
+            public ForMan(Man man) {
+                children = man.getChildren();
+                age = man.getAge();
+            }
+        }
+
+        Map<ForMan, List<Man>> map = humanity.stream()
+                .collect(Collectors.groupingBy(ForMan::new));
+
+
+        Map<String, Map<String, List<Man>>> groupByCityAndStreet =
+                humanity.stream()
                 .collect(Collectors.groupingBy(x -> x.getAddress().getCity(), Collectors.groupingBy(x -> x.getAddress().getStreet())));
 
         System.out.println(groupByCityAndStreet.entrySet().stream().mapToInt(x -> (int) x.getValue().entrySet().stream().filter(j -> j.getValue().size() > 4).count()).sum());
